@@ -41,9 +41,20 @@
 				<condition name="need-to-login" />
 			</condition>
 			<action>
-				<run script="var post_url='http://www.tvcatchup.com/login.html';var post_data={username:'${username}',password:'${password}', login:'1'};jQuery.post(post_url,post_data);" />
-				<pause time="5000" />
-				<visit url="http://www.tvcatchup.com/" />
+				<visit url="http://www.tvcatchup.com/login.html" />
+				<goto state="try-to-login" />
+			</action>
+		</event>
+	</state>
+
+	<state name="try-to-login">
+		<event>
+			<condition>
+				<javascript script="true ? 1 : 0" matches="1" />
+			</condition>
+			<action>
+				<run script="document.getElementsByName('username')[0].value = '${username}'; document.getElementsByName('password')[0].value = '${password}'; document.getElementById('form').submit();" />
+				<pause time="3000" />
 				<goto state="check-for-auth-again" />
 			</action>
 		</event>
